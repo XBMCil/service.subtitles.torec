@@ -5,7 +5,8 @@
        provider-name="slmosl">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-<import addon="script.common.plugin.cache" version="0.9.1"/>
+    <import addon="script.common.plugin.cache" version="0.9.1"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
   </requires>
   <extension point="xbmc.subtitle.module"
              library="service.py" />
