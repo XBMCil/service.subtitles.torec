@@ -98,8 +98,12 @@ def download(page_id, subtitle_id,filename, stack=False):
         
         (subtitleData, subtitleName) = downloader.download(result)
         
-        zip = os.path.join( __temp__, "Torec.zip")
-        downloader.saveData(zip, subtitleData)
+        zip = os.path.join(__temp__, "Torec.zip")
+        with open(zip, "wb") as subFile:
+            subFile.write(subtitleData)
+        subFile.close()
+        xbmc.sleep(500)
+        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (zip,__temp__,)).encode('utf-8'), True)
 
         for file in xbmcvfs.listdir(__temp__)[1]:
             log(__name__, "file=%s" % file)

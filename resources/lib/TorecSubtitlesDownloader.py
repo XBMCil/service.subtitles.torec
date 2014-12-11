@@ -158,32 +158,6 @@ class TorecSubtitlesDownloader:
         response = self.urlHandler.request("%s%s" % (self.BASE_URL, downloadLink))
         fileName = re.search("filename=(.*)", response.headers["content-disposition"]).groups()[0]
         return (response.data, fileName)
-        
-    def saveData(self, fileName, data, shouldUnzip=True):
-        log(__name__ ,"Saving to %s (size %d)" % (fileName, len(data)))
-        # Save the downloaded zip file
-        with open( fileName,"wb") as f:
-            f.write(data)
-        
-        if shouldUnzip:
-            # Unzip the zip file
-            log(__name__ ,"Unzip the zip file")
-            zipDirPath = os.path.dirname(fileName)
-            zip = zipfile.ZipFile(fileName, "r")
-            zip.extractall(zipDirPath)
-            zip.close()
-            # Remove the unneeded zip file
-            os.remove(fileName)
-            
-            for srtFile in os.listdir(zipDirPath):
-	        if srtFile.endswith(".srt"):
-                    srtFile = os.path.join(zipDirPath,srtFile)
-                    
-                    #convert file from cp1255 to utf-8
-                    tempFileName=srtFile+ ".tmp"
-                    convert_file(srtFile,tempFileName)
-                    shutil.copy(tempFileName,srtFile)
-                    os.remove(tempFileName)
             
     def sanitize(self, name):
         return re.sub('[\.\[\]\-]', self.DEFAULT_SEPERATOR, name.upper())
