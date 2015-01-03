@@ -135,7 +135,8 @@ class TorecSubtitlesDownloader:
         return (response.data, fileName)
             
     def sanitize(self, name):
-        return re.sub('[\'\.\[\]\-]', self.DEFAULT_SEPERATOR, name.upper())
+        cleaned_name = re.sub('[\']', '', name.upper())
+        return re.sub('[\.\[\]\-]', self.DEFAULT_SEPERATOR, cleaned_name)
         
     def find_most_relevant_option(self, name, subtitles_options):
         tokenized_name = self.sanitize(name).split()
