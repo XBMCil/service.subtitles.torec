@@ -95,7 +95,7 @@ def search(item):
     log(__name__, "Overall search took %f" % (time.time() - start_time))
 
 def download(page_id, subtitle_id,filename, stack=False):
-    files = glob.glob(os.path.join(__temp__, "*"))
+    files = glob.glob(os.path.join(__temp__, "*.srt"))
     for f in files:
       log(__name__, "deleting %s" % f)
       os.remove(f)

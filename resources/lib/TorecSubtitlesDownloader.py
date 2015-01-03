@@ -58,7 +58,7 @@ class FirefoxURLHandler:
                                   ('Accept-Language', 'en-us,en;q=0.5'),
                                   ('Pragma', 'no-cache'),
                                   ('Cache-Control', 'no-cache'),
-                                  ('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0')]
+                                  ('User-Agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')]
     
     def request(self, url, data=None, ajax=False, referer=None, cookie=None):
         if (data != None):
@@ -135,7 +135,7 @@ class TorecSubtitlesDownloader:
         return (response.data, fileName)
             
     def sanitize(self, name):
-        return re.sub('[\.\[\]\-]', self.DEFAULT_SEPERATOR, name.upper())
+        return re.sub('[\'\.\[\]\-]', self.DEFAULT_SEPERATOR, name.upper())
         
     def find_most_relevant_option(self, name, subtitles_options):
         tokenized_name = self.sanitize(name).split()
