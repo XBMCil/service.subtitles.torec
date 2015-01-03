@@ -119,7 +119,7 @@ class TorecSubtitlesDownloader:
         return SubtitlePage(id, movieName, subURL, subtitleData)
         
     def findChosenOption(self, name, subtitlePage):
-        name = name.replace(".", " ").replace("-", " ").split()
+        name = name.replace(".", " ").replace("-", " ").upper().split()
         # Find the most likely subtitle (the subtitle which adheres to most of the movie properties)
         maxLikelihood = 0
         chosenOption = None
