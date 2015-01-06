@@ -120,7 +120,7 @@ class TorecSubtitlesDownloader:
     def getDownloadLink(self, subID, optionID, subURL, persist=True):        
         requestID = self._requestSubtitle(subID, subURL)
         
-        params = {"sub_id" : subID, "code": optionID, "sh" : "yes", "guest" : requestID, "timewaited" : "16"}
+        params = {"sub_id" : subID, "code": optionID, "sh" : "yes", "guest" : requestID, "timewaited" : "20"}
         for i in xrange(16):
             response = self.urlHandler.request("%s/ajax/sub/downloadun.asp" % self.BASE_URL, params, ajax=True)
             if (len(response.data) != 0 or not persist):
