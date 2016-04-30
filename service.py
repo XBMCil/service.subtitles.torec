@@ -96,9 +96,9 @@ def search(item):
 
 def delete_old_subs():
   files = glob.glob(os.path.join(__temp__, u"*.srt"))
-    for f in files:
-      log(__name__, "deleting %s" % f)
-      os.remove(f)
+  for f in files:
+    log(__name__, "deleting %s" % f)
+    os.remove(f)
 
 def download(page_id, subtitle_id,filename, stack=False):
     subtitle_list = []
@@ -126,11 +126,11 @@ def download(page_id, subtitle_id,filename, stack=False):
         log(__name__ ,"Downloading subtitles from '%s'" % result)
         
         (subtitleData, subtitleName) = downloader.download(result)
-        zip = os.path.join(__temp__, "Torec.zip")
-        with open(zip, "wb") as subFile:
+        rarFile = os.path.join(__temp__, "Torec.rar")
+        with open(rarFile, "wb") as subFile:
             subFile.write(subtitleData)
 
-        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (zip,__temp__,)).encode('utf-8'), True)
+        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (rarFile,__temp__,)).encode('utf-8'), True)
 
         for file in xbmcvfs.listdir(__temp__)[1]:
             ufile=file.decode('utf-8')
