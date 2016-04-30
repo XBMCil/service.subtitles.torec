@@ -1,3 +1,8 @@
+1.0.6
+- bypass for new issue with TOO MANY DL
+- some minor speedups
+- utf-8 issues (zofer1)
+
 1.0.5
 - better handling of TOO MANY DL error by performing retries
 

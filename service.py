@@ -94,14 +94,15 @@ def search(item):
     xbmcplugin.addDirectoryItems(handle=int(sys.argv[1]), items=list_items)
     log(__name__, "Overall search took %f" % (time.time() - start_time))
 
-def download(page_id, subtitle_id,filename, stack=False):
-    files = glob.glob(os.path.join(__temp__, "*.srt"))
+def delete_old_subs():
+  files = glob.glob(os.path.join(__temp__, u"*.srt"))
     for f in files:
       log(__name__, "deleting %s" % f)
       os.remove(f)
 
+def download(page_id, subtitle_id,filename, stack=False):
     subtitle_list = []
-    exts = [".srt", ".sub"]
+    exts          = [".srt", ".sub"]
     
     delay         = 20
     download_wait = delay
