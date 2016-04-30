@@ -121,7 +121,7 @@ class TorecSubtitlesDownloader:
         requestID = self._requestSubtitle(subID, subURL)
         
         params = {"sub_id" : subID, "code": optionID, "sh" : "yes", "guest" : requestID, "timewaited" : "9"}
-        for i in xrange(160):
+        for i in xrange(16):
             response = self.urlHandler.request("%s/ajax/sub/downloadun.asp" % self.BASE_URL, params, ajax=True)
             if (not persist):
                 break
