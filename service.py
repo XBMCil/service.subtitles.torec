@@ -94,14 +94,15 @@ def search(item):
     xbmcplugin.addDirectoryItems(handle=int(sys.argv[1]), items=list_items)
     log(__name__, "Overall search took %f" % (time.time() - start_time))
 
-def download(page_id, subtitle_id,filename, stack=False):
-    files = glob.glob(os.path.join(__temp__, "*.srt"))
-    for f in files:
-      log(__name__, "deleting %s" % f)
-      os.remove(f)
+def delete_old_subs():
+  files = glob.glob(os.path.join(__temp__, u"*.srt"))
+  for f in files:
+    log(__name__, "deleting %s" % f)
+    os.remove(f)
 
+def download(page_id, subtitle_id,filename, stack=False):
     subtitle_list = []
-    exts = [".srt", ".sub"]
+    exts          = [".srt", ".sub"]
     
     delay         = 20
     download_wait = delay
@@ -125,11 +126,11 @@ def download(page_id, subtitle_id,filename, stack=False):
         log(__name__ ,"Downloading subtitles from '%s'" % result)
         
         (subtitleData, subtitleName) = downloader.download(result)
-        zip = os.path.join(__temp__, "Torec.zip")
-        with open(zip, "wb") as subFile:
+        rarFile = os.path.join(__temp__, "Torec.rar")
+        with open(rarFile, "wb") as subFile:
             subFile.write(subtitleData)
 
-        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (zip,__temp__,)).encode('utf-8'), True)
+        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (rarFile,__temp__,)).encode('utf-8'), True)
 
         for file in xbmcvfs.listdir(__temp__)[1]:
             ufile=file.decode('utf-8')
