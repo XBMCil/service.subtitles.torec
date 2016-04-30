@@ -133,9 +133,10 @@ def download(page_id, subtitle_id,filename, stack=False):
         xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (zip,__temp__,)).encode('utf-8'), True)
 
         for file in xbmcvfs.listdir(__temp__)[1]:
-            log(__name__, "file=%s" % file)
-            file = os.path.join(__temp__, file)
-            if (os.path.splitext(file)[1] in exts):
+            ufile=file.decode('utf-8')
+            log(__name__, "file=%s" % ufile)
+            file = os.path.join(__temp__, ufile)
+            if (os.path.splitext(ufile)[1] in exts):
               convert_to_utf(file)
               subtitle_list.append(file)
       
