@@ -109,6 +109,7 @@ def download(page_id, subtitle_id,filename, stack=False):
     downloader    = TorecSubtitlesDownloader()
     start_time    = time.time()
 
+    delete_old_subs()
     try:
         # Wait the minimal time needed for retrieving the download link
         for i in range (int(download_wait)):
@@ -126,11 +127,12 @@ def download(page_id, subtitle_id,filename, stack=False):
         log(__name__ ,"Downloading subtitles from '%s'" % result)
         
         (subtitleData, subtitleName) = downloader.download(result)
-        rarFile = os.path.join(__temp__, "Torec.rar")
-        with open(rarFile, "wb") as subFile:
+        (fileName, fileExt) = os.path.splitext(subtitleName)
+        archiveFile = os.path.join(__temp__, "Torec%s" % fileExt)
+        with open(archiveFile, "wb") as subFile:
             subFile.write(subtitleData)
 
-        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (rarFile,__temp__,)).encode('utf-8'), True)
+        xbmc.executebuiltin(('XBMC.Extract("%s","%s")' % (archiveFile,__temp__,)).encode('utf-8'), True)
 
         for file in xbmcvfs.listdir(__temp__)[1]:
             ufile=file.decode('utf-8')
