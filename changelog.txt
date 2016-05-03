@@ -1,3 +1,6 @@
+1.0.8
+- another fix for TOO MANY DL issue (gklein)
+
 1.0.7
 - added support for zip and rar archives (gklein)
 
