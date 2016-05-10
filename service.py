@@ -71,8 +71,11 @@ def search(item):
         search_string = build_search_string(item)
         search_data = downloader.search(search_string)
         log(__name__, "search took %f" % (time.time() - search_start_time))
-    except:
-        log(__name__, "failed to connect to service for subtitle search")
+    except Exception as e:
+        log(
+            __name__,
+            "failed to connect to service for subtitle search %s" % e
+        )
         xbmc.executebuiltin(
             (u'Notification(%s,%s)' % (__scriptname__, __language__(32001))
              ).encode('utf-8'))
@@ -130,14 +133,17 @@ def download(page_id, subtitle_id, filename, stack=False):
     try:
         # Wait the minimal time needed for retrieving the download link
         for i in range(int(download_wait)):
-            result = downloader.getDownloadLink(page_id, subtitle_id, False)
+            result = downloader.get_download_link(page_id, subtitle_id, False)
             if result is not None:
                 break
             log(__name__, "download will start in %i seconds" % (delay,))
             delay -= 1
             time.sleep(1)
-    except:
-        log(__name__, "failed to connect to service for subtitle download")
+    except Exception as e:
+        log(
+            __name__,
+            "failed to connect to service for subtitle download %s" % e
+        )
         return subtitle_list
         
     if result is not None:
@@ -200,7 +206,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
     item['tvshow'] = normalize_string(xbmc.getInfoLabel(
         "VideoPlayer.TVshowtitle")
     )  # Show
-    item['title'] = normalizeString(xbmc.getInfoLabel(
+    item['title'] = normalize_string(xbmc.getInfoLabel(
         "VideoPlayer.OriginalTitle")
     )  # try to get original title
     item['file_original_path'] = urllib.unquote(
@@ -219,7 +225,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
 
     if item['title'] == "":
         log(__name__, "VideoPlayer.OriginalTitle not found")
-        item['title'] = normalizeString(
+        item['title'] = normalize_string(
             xbmc.getInfoLabel("VideoPlayer.Title")
         ) # no original title, get just Title
 
