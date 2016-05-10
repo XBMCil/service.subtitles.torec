@@ -13,8 +13,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import xbmcvfs
-from SubtitleHelper import log, build_search_string, normalize_string
-from TorecSubtitlesDownloader import TorecSubtitlesDownloader
+
 
 __addon__ = xbmcaddon.Addon()
 __author__ = __addon__.getAddonInfo('author')
@@ -39,6 +38,9 @@ if xbmcvfs.exists(__temp__):
 xbmcvfs.mkdirs(__temp__)
 
 sys.path.append(__resource__)
+
+from SubtitleHelper import log, build_search_string, normalize_string
+from TorecSubtitlesDownloader import TorecSubtitlesDownloader
 
 
 def convert_to_utf(file_):
