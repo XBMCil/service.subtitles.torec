@@ -113,7 +113,7 @@ def download(page_id, subtitle_id,filename, stack=False):
     try:
         # Wait the minimal time needed for retrieving the download link
         for i in range (int(download_wait)):
-            result =  downloader.getDownloadLink(page_id, subtitle_id, False)
+            result =  downloader.get_download_link(page_id, subtitle_id, False)
             if (result != None):
                 break
             log(__name__ ,"download will start in %i seconds" % (delay,))
