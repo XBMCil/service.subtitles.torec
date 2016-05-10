@@ -12,8 +12,8 @@ import xbmcaddon
 
 from SubtitleHelper import log
 
-__addon__      = xbmcaddon.Addon()
-__version__    = __addon__.getAddonInfo('version') # Module version
+__addon__ = xbmcaddon.Addon()
+__version__ = __addon__.getAddonInfo('version')  # Module version
 __scriptname__ = __addon__.getAddonInfo('name')
 __language__ = __addon__.getLocalizedString
 
