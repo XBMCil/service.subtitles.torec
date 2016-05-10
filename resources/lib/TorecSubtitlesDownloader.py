@@ -42,7 +42,7 @@ class SubtitlePage(object):
             }
         )[0].findAll("option")
         filtered_subtitle_options = filter(
-            lambda x: "value" in x, subtitle_options
+            lambda x: x.get("value") is not None, subtitle_options
         )
         return map(
             lambda x: SubtitleOption(x.string.strip(), x["value"]),
