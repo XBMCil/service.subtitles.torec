@@ -200,7 +200,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
     item['tvshow'] = normalize_string(xbmc.getInfoLabel(
         "VideoPlayer.TVshowtitle")
     )  # Show
-    item['title'] = normalizeString(xbmc.getInfoLabel(
+    item['title'] = normalize_string(xbmc.getInfoLabel(
         "VideoPlayer.OriginalTitle")
     )  # try to get original title
     item['file_original_path'] = urllib.unquote(
@@ -219,7 +219,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
 
     if item['title'] == "":
         log(__name__, "VideoPlayer.OriginalTitle not found")
-        item['title'] = normalizeString(
+        item['title'] = normalize_string(
             xbmc.getInfoLabel("VideoPlayer.Title")
         ) # no original title, get just Title
 
