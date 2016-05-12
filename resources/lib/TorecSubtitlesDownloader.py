@@ -22,7 +22,7 @@ class SubtitleOption(object):
     def __init__(self, name, id):
         self.name = name
         self.id = id
-        
+
     def __repr__(self):
         return "%s" % self.name
 
@@ -33,7 +33,7 @@ class SubtitlePage(object):
         self.name = name
         self.url = url
         self.options = self._parse_options(data)
-        
+
     def _parse_options(self, data):
         subtitle_soup = bs4.BeautifulSoup(data, "html.parser")
         subtitle_options = subtitle_soup(
@@ -54,7 +54,7 @@ class Response(object):
     def __init__(self, response):
         self.data = self._handle_data(response)
         self.headers = response.headers
-        
+
     def _handle_data(self, resp):
         data = resp.read()
         if len(data) != 0:
@@ -133,7 +133,7 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
             "subId": sub_id,
             "current_datetime": current_time
         }
-    
+
     def search(self, movie_name):
         santized_name = self.sanitize(movie_name)
         log(__name__, "Searching for %s" % santized_name)
@@ -176,6 +176,15 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         :param persist:
         :return:
         """
+        js_link = (
+            'http://www.torec.net/gjs/jquery1.3.2.min.js,jquery.all.min.js,'
+            'user_functions.js,jquery.querystring.js,jquery.starrating.js,'
+            'subw.js'
+            )
+        user_auth_text = self.opener.open(js_link).read()
+        user_auth = re.findall(
+            r'userAuth=.*;', user_auth_text
+            )[0].strip(';').strip('userAuth=').strip("'")
         response = None
         data = None
 
@@ -184,7 +193,8 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
             "code": option_id,
             "sh": "yes",
             "guest": "",
-            "timewated": "-1"
+            "timewated": "-1",
+            "userAuth": user_auth
         }
         params = urllib.urlencode(params)
         for i in xrange(16):
@@ -208,11 +218,11 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
             "filename=(.*)", response.headers["content-disposition"]
         ).groups()[0]
         return data, file_name
-            
+
     def sanitize(self, name):
         cleaned_name = re.sub('[\']', '', name.upper())
         return re.sub('[\.\[\]\-]', self.DEFAULT_SEPERATOR, cleaned_name)
-        
+
     def find_most_relevant_option(self, name, subtitles_options):
         tokenized_name = self.sanitize(name).split()
         # Find the most likely subtitle (the subtitle which adheres to most of
