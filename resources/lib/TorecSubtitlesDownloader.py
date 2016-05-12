@@ -176,11 +176,7 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         :param persist:
         :return:
         """
-        js_link = (
-            'http://www.torec.net/gjs/jquery1.3.2.min.js,jquery.all.min.js,'
-            'user_functions.js,jquery.querystring.js,jquery.starrating.js,'
-            'subw.js'
-            )
+        js_link = ("http://www.torec.net/gjs/subw.js")
         user_auth_text = self.opener.open(js_link).read()
         user_auth = re.findall(
             r'userAuth=.*;', user_auth_text
