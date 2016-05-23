@@ -113,9 +113,10 @@ class FirefoxURLHandler(object):
 
 class TorecSubtitlesDownloader(FirefoxURLHandler):
     DEFAULT_SEPERATOR = " "
-    BASE_URL = "http://www.torec.net"
-    SUBTITLE_PATH = "sub.asp?sub_id="
-    DEFAULT_COOKIE = (
+    BASE_URL          = "http://www.torec.net"
+    SUBTITLE_PATH     = "sub.asp?sub_id="
+    USER_AUTH_JS_URL  = "http://www.torec.net/gjs/subw.js"
+    DEFAULT_COOKIE    = (
         "Torec_NC_sub_%(subId)s=sub=%(current_datetime)s; Torec_NC_s="
         "%(screen_width)d"
     )
@@ -132,11 +133,8 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         }
 
     def _get_user_auth(self):
-        user_auth_text = self.opener.open("http://www.torec.net/gjs/subw.js").read()
-        user_auth = re.findall(
-            r'userAuth=.*;', user_auth_text
-            )[0].strip(';').strip('userAuth=').strip("'")
-        return user_auth
+        user_auth_text = self.opener.open(self.USER_AUTH_JS_URL).read()
+        return re.search(r"userAuth='(.*)';", user_auth_text).group(1)
 
     def _request_subtitle(self, sub_id):
          params = {
