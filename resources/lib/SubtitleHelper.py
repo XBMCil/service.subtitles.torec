@@ -12,8 +12,8 @@ __scriptname__ = __addon__.getAddonInfo('name')
 
 
 def log(module, msg):
-    # xbmc.log((u"### [%s] - %s" % (module, msg,)).encode('utf-8'),
-    # level=xbmc.LOGDEBUG)
+    xbmc.log((u"### [%s] - %s" % (module, msg,)).encode('utf-8'),
+    level=xbmc.LOGDEBUG)
     print (u"### [%s] - %s" % (module, msg,)).encode('utf-8')
 
 

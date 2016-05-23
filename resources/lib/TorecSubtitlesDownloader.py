@@ -17,7 +17,6 @@ __version__ = __addon__.getAddonInfo('version')  # Module version
 __scriptname__ = __addon__.getAddonInfo('name')
 __language__ = __addon__.getLocalizedString
 
-
 class SubtitleOption(object):
     def __init__(self, name, id):
         self.name = name
@@ -25,7 +24,6 @@ class SubtitleOption(object):
 
     def __repr__(self):
         return "%s" % self.name
-
 
 class SubtitlePage(object):
     def __init__(self, id, name, url, data):
@@ -115,16 +113,16 @@ class FirefoxURLHandler(object):
 
 class TorecSubtitlesDownloader(FirefoxURLHandler):
     DEFAULT_SEPERATOR = " "
-    BASE_URL = "http://www.torec.net"
-    SUBTITLE_PATH = "sub.asp?sub_id="
-    DEFAULT_COOKIE = (
+    BASE_URL          = "http://www.torec.net"
+    SUBTITLE_PATH     = "sub.asp?sub_id="
+    USER_AUTH_JS_URL  = "http://www.torec.net/gjs/subw.js"
+    DEFAULT_COOKIE    = (
         "Torec_NC_sub_%(subId)s=sub=%(current_datetime)s; Torec_NC_s="
         "%(screen_width)d"
     )
 
     def __init__(self):
         super(TorecSubtitlesDownloader, self).__init__()
-        self.login()
 
     def _build_default_cookie(self, sub_id):
         current_time = datetime.datetime.now().strftime("%m/%d/%Y+%I:%M:%S+%p")
@@ -133,6 +131,18 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
             "subId": sub_id,
             "current_datetime": current_time
         }
+
+    def _get_user_auth(self):
+        user_auth_text = self.opener.open(self.USER_AUTH_JS_URL).read()
+        return re.search(r"userAuth='(.*)';", user_auth_text).group(1)
+
+    def _request_subtitle(self, sub_id):
+         params = {
+            "sub_id"  : sub_id, 
+            "s"       : 1440
+         }
+
+         return self.opener.open("%s/ajax/sub/guest_time.asp" % self.BASE_URL, urllib.urlencode(params)).read()
 
     def search(self, movie_name):
         santized_name = self.sanitize(movie_name)
@@ -167,35 +177,22 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         subtitle_data = subtitle_data.read()
         return SubtitlePage(id_, movie_name, sub_url, subtitle_data)
 
-    def get_download_link(self, sub_id, option_id, persist=True):
-        """
-        Get subtitle download link
-
-        :param sub_id:
-        :param option_id:
-        :param persist:
-        :return:
-        """
-        js_link = ("http://www.torec.net/gjs/subw.js")
-        user_auth_text = self.opener.open(js_link).read()
-        user_auth = re.findall(
-            r'userAuth=.*;', user_auth_text
-            )[0].strip(';').strip('userAuth=').strip("'")
+    def get_download_link(self, sub_id, option_id, persist=True):        
         response = None
         data = None
-
+        
         params = {
-            "sub_id": sub_id,
-            "code": option_id,
-            "sh": "yes",
-            "guest": "",
-            "timewated": "-1",
-            "userAuth": user_auth
+            "sub_id":     sub_id,
+            "code":       option_id,
+            "sh":         "yes",
+            "guest":      self._request_subtitle(sub_id),
+            "timewaited": "11",
+            "userAuth":   self._get_user_auth()
         }
-        params = urllib.urlencode(params)
+
         for i in xrange(16):
             response = self.opener.open(
-                "%s/ajax/sub/downloadun.asp" % self.BASE_URL, params,
+                "%s/ajax/sub/downloadun.asp" % self.BASE_URL, urllib.urlencode(params),
             )
             data = response.read()
             if len(data) != 0 or not persist:

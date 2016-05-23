@@ -124,26 +124,14 @@ def download(page_id, subtitle_id, filename, stack=False):
     result = None
     subtitle_list = []
     exts = [".srt", ".sub"]
-    delay = 20
-    download_wait = delay
     downloader = TorecSubtitlesDownloader()
     start_time = time.time()
 
     delete_old_subs()
     try:
-        # Wait the minimal time needed for retrieving the download link
-        for i in range(int(download_wait)):
-            result = downloader.get_download_link(page_id, subtitle_id, False)
-            if result is not None:
-                break
-            log(__name__, "download will start in %i seconds" % (delay,))
-            delay -= 1
-            time.sleep(1)
+        result = downloader.get_download_link(page_id, subtitle_id, False)
     except Exception as e:
-        log(
-            __name__,
-            "failed to connect to service for subtitle download %s" % e
-        )
+        log(__name__,"failed to connect to service for subtitle download %s" % e)
         return subtitle_list
         
     if result is not None:
