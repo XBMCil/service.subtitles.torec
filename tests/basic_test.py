@@ -30,7 +30,7 @@ option      = search_data.options[0]
 page_id     = search_data.id
 subtitle_id = option.id
 
-result                 =  downloader.get_download_link(page_id, subtitle_id, False)
+result                 =  downloader.get_download_link(page_id, subtitle_id)
 subtitleData, fileName = downloader.download(result)
 extension              = os.path.splitext(fileName)[1]
 
