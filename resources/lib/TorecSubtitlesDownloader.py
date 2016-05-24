@@ -177,10 +177,7 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         subtitle_data = subtitle_data.read()
         return SubtitlePage(id_, movie_name, sub_url, subtitle_data)
 
-    def get_download_link(self, sub_id, option_id, persist=True):        
-        response = None
-        data = None
-        
+    def get_download_link(self, sub_id, option_id):        
         params = {
             "sub_id":     sub_id,
             "code":       option_id,
@@ -190,17 +187,8 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
             "userAuth":   self._get_user_auth()
         }
 
-        for i in xrange(16):
-            response = self.opener.open(
-                "%s/ajax/sub/downloadun.asp" % self.BASE_URL, urllib.urlencode(params),
-            )
-            data = response.read()
-            if len(data) != 0 or not persist:
-                break
-            time.sleep(1)
-        if data:
-            return data
-        return response
+        response = self.opener.open("%s/ajax/sub/downloadun.asp" % self.BASE_URL, urllib.urlencode(params))
+        return response.read()
 
     def download(self, download_link):
         response = self.opener.open(
