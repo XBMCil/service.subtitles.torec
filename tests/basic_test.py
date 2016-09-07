@@ -32,6 +32,10 @@ subtitle_id = option.id
 
 result                 =  downloader.get_download_link(page_id, subtitle_id)
 subtitleData, fileName = downloader.download(result)
+if subtitleData is None:
+  print "Test FAILED"
+  sys.exit(1)
+
 extension              = os.path.splitext(fileName)[1]
 
 temp = tempfile.NamedTemporaryFile()
