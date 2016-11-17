@@ -192,7 +192,52 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         response = self.opener.open("%s/ajax/sub/guest_time.asp" % self.BASE_URL, urllib.urlencode(params))
         return response.read()
 
+    def _extract_code(self, rcode):
+        CODES_ADDITIONS = [0xaa, 0x8f, 0xa2, 0x9e]
+
+        rcodes = re.findall("..", rcode)
+        code = ""
+        for i in xrange(len(rcodes)):
+            code_part = int(rcodes[i], 16)
+            code += str(code_part - CODES_ADDITIONS[i])
+
+        return code
+
+    def _request_code(self, sub_id, option_id):
+        params = {
+            "sub_id"  : sub_id, 
+            "codes"   : option_id,
+        }
+
+        response      = self.opener.open("%s/ajax/sub/t7/guest_dl_popup.asp" % self.BASE_URL, urllib.urlencode(params))
+        response_data = response.read()
+
+        code_match = re.search("code=(\w{8})", response_data)
+        if not code_match:
+            return None
+
+        code = code_match.group(1)
+        return code
+
+    def _confirm_download_code(self, sub_id, option_id):
+        rcode = self._request_code(sub_id, option_id)
+        if not rcode:
+            return
+
+        code = self._extract_code(rcode)
+
+        params = {
+            "sub_id" : sub_id, 
+            "code"   : code,
+            "rcode"  : rcode
+        }
+
+        response      = self.opener.open("%s/ajax/sub/t7/guest_dl_code.asp" % self.BASE_URL, urllib.urlencode(params))
+        response_data = response.read()
+
     def get_download_link(self, sub_id, option_id):
+        self._confirm_download_code(sub_id, option_id)
+
         guest_token    = self._request_subtitle(sub_id)
         encoded_params = urllib.urlencode({
                 "sub_id":     sub_id,
@@ -207,7 +252,7 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
 
         # Torec website may delay download up to 13 seconds
         while (not xbmc.abortRequested) and (waited_msec < self.MAXIMUM_WAIT_TIME_MSEC):
-            response = self.opener.open("%s/ajax/sub/downloadun.asp" % self.BASE_URL, encoded_params)
+            response = self.opener.open("%s/ajax/sub/t7/downloadun.asp" % self.BASE_URL, encoded_params)
             download_link = response.read()
 
             if download_link and "sdls.asp" in download_link:
