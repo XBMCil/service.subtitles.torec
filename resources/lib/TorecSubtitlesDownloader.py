@@ -196,15 +196,9 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         return response.read()
 
     def _extract_code(self, rcode):
-        CODES_ADDITIONS = [0xaa, 0x8f, 0xa2, 0x9e]
-
-        rcodes = re.findall("..", rcode)
-        code = ""
-        for i in xrange(len(rcodes)):
-            code_part = int(rcodes[i], 16)
-            code += str(code_part - CODES_ADDITIONS[i])
-
-        return code
+        rcodes = re.findall(".", rcode)
+        
+        return ''.join([str(ord(rcodes[i]) - 68) for i in xrange(len(rcodes))])
 
     def _request_code(self, sub_id, option_id):
         params = {
@@ -215,7 +209,7 @@ class TorecSubtitlesDownloader(FirefoxURLHandler):
         response      = self.opener.open("%s/ajax/sub/t7/guest_dl_popup.asp" % self.BASE_URL, urllib.urlencode(params))
         response_data = response.read()
 
-        code_match = re.search("code=(\w{8})", response_data)
+        code_match = re.search("code=(\w{4})", response_data)
         if not code_match:
             return None
 
