@@ -1,5 +1,6 @@
 1.3.0
 - Added fake token generation support - download speed should much improve (@yosi-dediashvili)
+- Improved Checking item's media type (@burekas7)
 
 1.2.1 
 - Improvement for the option of using the addon when kodi is not playing (@burekas7)
