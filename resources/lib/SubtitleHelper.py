@@ -67,16 +67,16 @@ def check_and_parse_if_title_is_TVshow(manualTitle):
         return ["NotTVShow", "0", "0"]
 
 def take_title_from_focused_item():
-    labelType = xbmc.getInfoLabel("ListItem.DBTYPE")  #movie/tvshow/season/episode
     labelMovieTitle = xbmc.getInfoLabel("ListItem.OriginalTitle")
     labelYear = xbmc.getInfoLabel("ListItem.Year")
     labelTVShowTitle = xbmc.getInfoLabel("ListItem.TVShowTitle")
     labelSeason = xbmc.getInfoLabel("ListItem.Season")
     labelEpisode = xbmc.getInfoLabel("ListItem.Episode")
-    isItMovie = xbmc.getCondVisibility("Container.Content(movies)") or labelType == 'movie'
-    isItEpisode = xbmc.getCondVisibility("Container.Content(episodes)") or labelType == 'episode'
+    labelType = xbmc.getInfoLabel("ListItem.DBTYPE")  #movie/tvshow/season/episode
+    isItMovie =  labelType == 'movie' or xbmc.getCondVisibility("Container.Content(movies)")
+    isItEpisode = labelType == 'episode' or xbmc.getCondVisibility("Container.Content(episodes)")
 
-    title = 'SearchFor ...'
+    title = 'SearchFor...'
     if isItMovie and labelMovieTitle and labelYear:
         title = labelMovieTitle + " " + labelYear
     elif isItEpisode and labelTVShowTitle and labelSeason and labelEpisode:
