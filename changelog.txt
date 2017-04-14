@@ -1,3 +1,11 @@
+1.4.0
+- Add login feature - Will download the subtitles from Torec with registered
+user credentials
+- Save session on cookie and rerty with it next time, if session not valid
+will try to re-login and get new session
+- Fix cookie permissions
+- Added tests for both movies and tvshows download
+
 1.3.1
 - Fixed broken download due to site changes and added some future changes protection
 

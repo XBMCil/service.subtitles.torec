@@ -8,3 +8,6 @@ def log(message, level):
 
 def sleep(msec):
 	time.sleep(msec / 1000.0)
+
+def translatePath(path):
+    return "/tmp"
