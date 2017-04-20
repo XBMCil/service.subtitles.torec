@@ -143,7 +143,7 @@ class TorecGuestTokenGenerator():
         if self.handle_daylight_saving_skew:
             t -= datetime.timedelta(hours = 1)
 
-        st = t.strftime("%m/%d/%Y %-I:%M:%S %p")
+        st = t.strftime("%m/%d/%Y %I:%M:%S %p")
         st = re.sub("(^|/| )0", r"\1", st)
         return "{}_sub{}".format(st, sub_id)
 
